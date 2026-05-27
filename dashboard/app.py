@@ -66,45 +66,19 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load mock data for both days
-def get_base_path():
-
-    # Running as PyInstaller EXE
-    if getattr(sys, 'frozen', False):
-        return Path(sys._MEIPASS)
-
-    # Running normally
-    return Path(__file__).resolve().parent
-
-
 def load_logs():
 
-    base_path = get_base_path()
-
-    data_dir = base_path / "mock_data"
-
-    print("Loading from:", data_dir)
+    data_dir = Path(__file__).parent / "mock_data"
 
     logs = []
 
-    files = [
+    for fname in [
         "cdn_logs_day1.json",
         "cdn_logs_day2.json",
         "cdn_logs_day3.json"
-    ]
+    ]:
 
-    for fname in files:
-
-        file_path = data_dir / fname
-
-        print("Checking:", file_path)
-
-        if not file_path.exists():
-            raise FileNotFoundError(
-                f"Missing file: {file_path}"
-            )
-
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(data_dir / fname, "r", encoding="utf-8") as f:
             logs.extend(json.load(f))
 
     return pd.DataFrame(logs)
