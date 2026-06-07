@@ -290,7 +290,6 @@ CHART_LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
     font=dict(family="Segoe UI", color=EPL_LIGHT, size=12),
-    title_font=dict(family="Segoe UI", color=EPL_LIGHT, size=14, ),
     legend=dict(
         bgcolor="rgba(255,255,255,0.05)",
         bordercolor=EPL_PINK,
@@ -299,21 +298,20 @@ CHART_LAYOUT = dict(
     ),
     hoverlabel=dict(
         bgcolor=EPL_PURPLE,
-        font_color=EPL_LIGHT,
+        font=dict(color=EPL_LIGHT, family="Segoe UI"),
         bordercolor=EPL_PINK,
-        font_family="Segoe UI",
     ),
     xaxis=dict(
         gridcolor="rgba(255,255,255,0.06)",
         zerolinecolor="rgba(255,255,255,0.1)",
         tickfont=dict(color=EPL_SUBTEXT),
-        title_font=dict(color=EPL_LIGHT),
+        title=dict(font=dict(color=EPL_LIGHT)),
     ),
     yaxis=dict(
         gridcolor="rgba(255,255,255,0.06)",
         zerolinecolor="rgba(255,255,255,0.1)",
         tickfont=dict(color=EPL_SUBTEXT),
-        title_font=dict(color=EPL_LIGHT),
+        title=dict(font=dict(color=EPL_LIGHT)),
     ),
     margin=dict(t=40, b=50, l=60, r=20),
     height=350,
@@ -824,8 +822,6 @@ def main():
                 showscale=False,
                 line=dict(color="rgba(255,255,255,0.1)", width=0.5)
             ),
-            text=dc_counts['Requests'], textposition='outside',
-            textfont=dict(color=EPL_LIGHT),
             hovertemplate="<b>%{x}</b><br>Requests: %{y:,}<extra></extra>",
         ))
         apply_theme(fig1, xaxis_title="Datacenter", yaxis_title="Requests")
@@ -851,8 +847,9 @@ def main():
             hovertemplate="<b>%{label}</b><br>%{value:,} requests<br>%{percent}<extra></extra>",
         ))
         apply_theme(fig2, showlegend=False,
-                    annotations=[dict(text="Cache", x=0.5, y=0.5, font_size=16,
-                                      font_color=EPL_LIGHT, showarrow=False)])
+                    annotations=[dict(text="Cache", x=0.5, y=0.5,
+                                      font=dict(size=16, color=EPL_LIGHT),
+                                      showarrow=False)])
         st.plotly_chart(fig2, use_container_width=True)
 
     # HTTP Status
@@ -873,8 +870,6 @@ def main():
             x=sc['Status'].astype(str), y=sc['Requests'],
             marker=dict(color=sc['color'],
                         line=dict(color="rgba(255,255,255,0.1)", width=0.5)),
-            text=sc['Requests'], textposition='outside',
-            textfont=dict(color=EPL_LIGHT),
             hovertemplate="<b>HTTP %{x}</b><br>%{y:,} requests<extra></extra>",
         ))
         apply_theme(fig3, xaxis_title="Status Code", yaxis_title="Requests")
@@ -933,8 +928,6 @@ def main():
                 showscale=False,
                 line=dict(color="rgba(255,255,255,0.1)", width=0.5)
             ),
-            text=geo['Requests'], textposition='auto',
-            textfont=dict(color=EPL_LIGHT),
             hovertemplate="<b>%{y}</b><br>%{x:,} requests<extra></extra>",
         ))
         apply_theme(fig6, xaxis_title="Requests", yaxis_title="", height=350,
@@ -1023,8 +1016,6 @@ def main():
         fig_custom.add_trace(go.Bar(
             x=chart_data[label_choice], y=chart_data[y_col],
             marker=dict(color=chart_data[y_col], colorscale=EPL_SCALE, showscale=True),
-            text=chart_data[y_col].round(2), textposition='outside',
-            textfont=dict(color=EPL_LIGHT),
             hovertemplate=f"<b>%{{x}}</b><br>{y_label}: %{{y}}<extra></extra>",
         ))
         apply_theme(fig_custom, xaxis_title=label_choice, yaxis_title=y_label, height=420)
@@ -1040,9 +1031,7 @@ def main():
     elif chart_type == "Scatter":
         fig_custom.add_trace(go.Scatter(
             x=list(range(len(chart_data))), y=chart_data[y_col],
-            mode='markers+text',
-            text=chart_data[label_choice], textposition='top center',
-            textfont=dict(color=EPL_LIGHT, size=10),
+            mode='markers',
             marker=dict(size=12, color=chart_data[y_col],
                         colorscale=EPL_SCALE, showscale=True,
                         line=dict(color=EPL_PURPLE, width=1)),
